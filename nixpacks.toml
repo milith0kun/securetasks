@@ -2,4 +2,4 @@
 cmds = ["npm install --no-audit --no-fund"]
 
 [start]
-cmd = "npx prisma migrate deploy && npm run start"
+cmd = "(npx prisma migrate deploy || npx prisma db push) && npm run start"

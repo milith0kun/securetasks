@@ -67,7 +67,7 @@ Escala: 1–4 Bajo · 5–9 Medio · 10–16 Alto · 17–25 Crítico. Valores d
 
 ## 5. Explicación de las correcciones
 
-**SQL Injection.** Todo acceso a datos usa Prisma Client, que envía los valores como parámetros enlazados, nunca concatenados en la consulta. No hay `$queryRaw` ni `$executeRaw`. Además Zod valida tipo y longitud, y el filtro `status` se compara con una lista cerrada antes de usarse.
+**SQL Injection.** Todo acceso a datos usa Prisma Client, que envía los valores como parámetros enlazados, nunca concatenados en la consulta. El único SQL directo es `SELECT 1` del endpoint `/api/health`, sin entrada de usuario. Además Zod valida tipo y longitud, y el filtro `status` se compara con una lista cerrada antes de usarse.
 
 **IDOR.** Las rutas `/api/tasks/[id]` cargan la tarea y comparan `task.userId` con el usuario de la sesión; solo el administrador queda exento. El propietario nunca se toma del cuerpo de la petición. El listado filtra por `userId`. Los intentos bloqueados se registran como `SECURITY_IDOR_BLOCKED`.
 

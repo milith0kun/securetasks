@@ -32,6 +32,8 @@ Las pruebas usan una base de datos en memoria, sin PostgreSQL. Resultado actual:
 
 Servicio Next.js conectado a este repositorio con Nixpacks y una base PostgreSQL en la red privada. Variable requerida: `DATABASE_URL`. Comando previo al arranque: `npx prisma migrate deploy`. Este despliegue no se ha ejecutado ni verificado desde este repositorio.
 
+Tras desplegar, `GET /api/health` devuelve 200 si la base responde y 503 si no.
+
 ## Documentación
 
 - [Arquitectura y flujo de autenticación](docs/arquitectura.md)

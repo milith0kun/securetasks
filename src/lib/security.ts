@@ -1,4 +1,4 @@
-import { hash, verify, Algorithm } from "@node-rs/argon2";
+import { hash, verify } from "@node-rs/argon2";
 import crypto from "crypto";
 import { z } from "zod";
 import { prisma } from "./prisma";
@@ -6,7 +6,7 @@ import { prisma } from "./prisma";
 // 1. ARGON2ID PASSWORD SECURITY
 export async function hashPassword(password: string): Promise<string> {
   return await hash(password, {
-    algorithm: Algorithm.Argon2id,
+    algorithm: 2, // Argon2id
     memoryCost: 19456, // 19 MiB
     timeCost: 2,
     parallelism: 1,

@@ -50,8 +50,8 @@ export async function POST(req: Request) {
     // Mensaje genérico para evitar enumeración de usuarios
     return NextResponse.json({
       message: "Si el correo se encuentra registrado, se enviará un enlace con instrucciones.",
-      // En entorno de demostración y pruebas, se retorna el token para facilitar la verificación automatizada
-      resetToken: process.env.NODE_ENV !== "production" ? tokenPreview : undefined,
+      // Sin servicio de correo, el token solo se devuelve fuera de producción o con DEMO_RESET_TOKEN=true (solo demostración)
+      resetToken: process.env.NODE_ENV !== "production" || process.env.DEMO_RESET_TOKEN === "true" ? tokenPreview : undefined,
     });
   } catch (err) {
     console.error("Error en forgot-password:", err);

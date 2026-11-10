@@ -1,0 +1,57 @@
+Recorrido extremo a extremo (scripts/e2e.cjs)
+Aplicación local (next dev) contra PostgreSQL real. Cada resultado se verificó además consultando la base directamente.
+Los datos temporales se eliminaron al terminar (usuarios temporales restantes: 0).
+
+OK    Registro (201) y rol forzado a estudiante
+OK    BD: usuario guardado con hash argon2id
+OK    Registro duplicado (409)
+OK    Registro con datos inválidos (400)
+OK    BD: sesión creada al registrar
+OK    /me con sesión (200)
+OK    Perfil: nombre guardado en BD
+OK    Perfil: contraseña actual incorrecta (400)
+OK    Perfil: cambio de contraseña guarda nuevo hash
+OK    Logout (200)
+OK    Tras logout /me da 401
+OK    BD: sesión revocada
+OK    Login con contraseña vieja (401)
+OK    Login con contraseña nueva (200) y cookie HttpOnly
+OK    Tarea creada y guardada en BD con dueño
+OK    Tarea inválida (400)
+OK    Listado devuelve solo las propias
+OK    Filtro por estado
+OK    Búsqueda por descripción (sin distinguir mayúsculas)
+OK    Búsqueda con SQLi inocua (200, 0 resultados, tabla intacta)
+OK    Edición guardada en BD
+OK    Consulta individual (200)
+OK    Login estudiante2
+OK    IDOR GET (403)
+OK    IDOR PUT (403)
+OK    IDOR DELETE (403)
+OK    BD: tarea ajena intacta tras intentos IDOR
+OK    Estudiante en /admin/users (403)
+OK    Estudiante en resumen docente (403)
+OK    Estudiante cambiando rol (403)
+OK    Docente: resumen (200) con métricas
+OK    Docente no ve tareas ajenas (403)
+OK    Admin: lista de usuarios con conteo de tareas
+OK    Admin ve todas las tareas
+OK    Admin cambia rol y se guarda en BD
+OK    Rol inválido (400)
+OK    Admin no puede cambiar su propio rol (400)
+OK    Auditoría registra eventos clave  [11 tipos]
+OK    Auditoría sin contraseñas ni hashes
+OK    Rol docente aplicado de inmediato
+OK    Eliminar tarea propia y desaparece de la BD
+OK    Recuperación: token emitido y solo su hash en BD
+OK    Recuperación: correo inexistente da 200 genérico
+OK    Reset con token (200)
+OK    Reutilizar token (400)
+OK    Reset revocó las sesiones activas (401)
+OK    Login con la contraseña restablecida
+OK    Fuerza bruta: bloqueo 429 con Retry-After
+OK    El bloqueo por IP también protege otras cuentas (429)
+
+RESULTADO: 49/49 comprobaciones correctas
+
+Alcance: se probó la API y el almacenamiento. La interfaz gráfica no se recorrió en un navegador automatizado.

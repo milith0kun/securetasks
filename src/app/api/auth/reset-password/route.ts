@@ -49,7 +49,7 @@ export async function POST(req: Request) {
       data: { passwordHash: newPasswordHash },
     });
 
-    // 3. Revocar todas las sesiónes activas del usuario (defensa contra robo de sesiónes)
+    // 3. Revocar todas las sesiones activas del usuario (defensa contra robo de sesiones)
     await prisma.session.updateMany({
       where: { userId: resetRecord.userId, revokedAt: null },
       data: { revokedAt: new Date() },

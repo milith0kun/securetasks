@@ -5,7 +5,7 @@ import { ChangePasswordSchema, hashPassword, verifyPassword, logAudit } from "@/
 import { z } from "zod";
 
 const UpdateProfileSchema = z.object({
-  name: z.string().min(2).max(100).optional(),
+  name: z.string().trim().min(2).max(100).optional(),
 });
 
 export async function GET() {
@@ -81,6 +81,13 @@ export async function PUT(req: Request) {
       where: { id: user.id },
       data: { name: parsed.data.name || user.name },
       select: { id: true, name: true, email: true, role: true },
+    });
+
+    await logAudit({
+      action: "PROFILE_UPDATE",
+      userId: user.id,
+      details: { field: "name" },
+      ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
     });
 
     return NextResponse.json({ message: "Perfil actualizado correctamente", user: updated });

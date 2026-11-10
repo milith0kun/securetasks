@@ -2,23 +2,6 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import {
-  ShieldCheck,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  Plus,
-  Search,
-  Trash2,
-  Edit2,
-  LogOut,
-  User as UserIcon,
-  Users,
-  BarChart3,
-  FileText,
-  KeyRound,
-  Filter,
-} from "lucide-react";
 
 interface UserProfile {
   id: string;
@@ -106,6 +89,8 @@ export default function DashboardPage() {
   // Perfil
   const [profileForm, setProfileForm] = useState({ currentPassword: "", newPassword: "" });
   const [profileMsg, setProfileMsg] = useState<string | null>(null);
+  const [nameForm, setNameForm] = useState("");
+  const [nameMsg, setNameMsg] = useState<string | null>(null);
 
   // Avisos de error visibles al usuario
   const [notice, setNotice] = useState<string | null>(null);
@@ -261,6 +246,27 @@ export default function DashboardPage() {
     }
   };
 
+  const handleNameChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setNameMsg(null);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nameForm.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCurrentUser((u) => (u ? { ...u, name: data.user.name } : u));
+        setNameMsg("Nombre actualizado correctamente");
+      } else {
+        setNameMsg(data.error || "No se pudo actualizar el nombre");
+      }
+    } catch {
+      setNameMsg("Error de conexión");
+    }
+  };
+
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setCurrentUser(null);
@@ -302,9 +308,7 @@ export default function DashboardPage() {
         <header className="border-b border-slate-200 bg-white">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-blue-600 text-white rounded-lg">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
+              
               <span className="font-bold text-xl tracking-tight">SecureTasks</span>
             </div>
             <div className="flex items-center gap-3">
@@ -326,7 +330,7 @@ export default function DashboardPage() {
 
         <main className="max-w-4xl mx-auto px-4 py-16 text-center space-y-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-xs font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5" /> Ingeniería de Software Seguro
+            Ingeniería de Software Seguro
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
             Gestión de tareas con seguridad desde el diseño
@@ -352,27 +356,18 @@ export default function DashboardPage() {
 
           <div className="grid sm:grid-cols-3 gap-6 pt-12 text-left">
             <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-xs space-y-2">
-              <div className="p-2 bg-blue-50 text-blue-600 rounded-lg w-fit">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
               <h3 className="font-bold text-slate-900 text-sm">Contraseñas Argon2id</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
                 Derivación de claves con algoritmo RFC 9106 Argon2id, memoria dedicada y resistencia ante ataques paralelos por GPU.
               </p>
             </div>
             <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-xs space-y-2">
-              <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg w-fit">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
               <h3 className="font-bold text-slate-900 text-sm">Control de roles y anti-IDOR</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
                 Permisos comprobados en el servidor para estudiantes, docentes y administradores.
               </p>
             </div>
             <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-xs space-y-2">
-              <div className="p-2 bg-purple-50 text-purple-600 rounded-lg w-fit">
-                <FileText className="w-5 h-5" />
-              </div>
               <h3 className="font-bold text-slate-900 text-sm">Auditoría de eventos</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
                 Registro de eventos de seguridad y operaciones sobre tareas, sin almacenar contraseñas ni tokens.
@@ -395,9 +390,7 @@ export default function DashboardPage() {
       <header className="border-b border-slate-200 bg-white sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 text-white rounded-lg">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
+            
             <div>
               <span className="font-bold text-lg tracking-tight">SecureTasks</span>
               <span className="ml-2 text-xs px-2 py-0.5 rounded-full font-mono uppercase bg-slate-100 text-slate-700 border border-slate-200">
@@ -413,11 +406,9 @@ export default function DashboardPage() {
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+              className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
               title="Cerrar Sesión"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
+            >Salir</button>
           </div>
         </div>
 
@@ -430,8 +421,7 @@ export default function DashboardPage() {
                 ? "border-blue-600 text-blue-600 font-bold"
                 : "border-transparent text-slate-600 hover:text-slate-900"
             }`}
-          >
-            <CheckCircle2 className="w-4 h-4" /> Mis Tareas
+          > Mis Tareas
           </button>
 
           {(currentUser.role === "docente" || currentUser.role === "administrador") && (
@@ -442,8 +432,7 @@ export default function DashboardPage() {
                   ? "border-blue-600 text-blue-600 font-bold"
                   : "border-transparent text-slate-600 hover:text-slate-900"
               }`}
-            >
-              <BarChart3 className="w-4 h-4" /> Resumen Docente
+            > Resumen Docente
             </button>
           )}
 
@@ -456,8 +445,7 @@ export default function DashboardPage() {
                     ? "border-blue-600 text-blue-600 font-bold"
                     : "border-transparent text-slate-600 hover:text-slate-900"
                 }`}
-              >
-                <Users className="w-4 h-4" /> Administración de Usuarios
+              > Administración de Usuarios
               </button>
 
               <button
@@ -467,8 +455,7 @@ export default function DashboardPage() {
                     ? "border-blue-600 text-blue-600 font-bold"
                     : "border-transparent text-slate-600 hover:text-slate-900"
                 }`}
-              >
-                <FileText className="w-4 h-4" /> Registros de Auditoría
+              > Registros de Auditoría
               </button>
             </>
           )}
@@ -480,8 +467,7 @@ export default function DashboardPage() {
                 ? "border-blue-600 text-blue-600 font-bold"
                 : "border-transparent text-slate-600 hover:text-slate-900"
             }`}
-          >
-            <UserIcon className="w-4 h-4" /> Perfil y Seguridad
+          > Perfil y Seguridad
           </button>
         </div>
       </header>
@@ -516,26 +502,23 @@ export default function DashboardPage() {
                   setModalOpen(true);
                 }}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 shadow-xs transition"
-              >
-                <Plus className="w-4 h-4" /> Nueva Tarea
+              >Nueva tarea
               </button>
             </div>
 
             {/* Filtros y búsqueda */}
             <div className="bg-white p-3 rounded-xl border border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center">
               <div className="relative w-full sm:w-72">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="text"
                   placeholder="Buscar por título o descripción..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
 
               <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto">
-                <Filter className="w-3.5 h-3.5 text-slate-400 ml-1" />
                 {["todas", "pendiente", "en_progreso", "completada"].map((st) => (
                   <button
                     key={st}
@@ -557,7 +540,6 @@ export default function DashboardPage() {
               <div className="text-center py-12 text-xs text-slate-400">Cargando tareas...</div>
             ) : tasks.length === 0 ? (
               <div className="bg-white border border-dashed border-slate-300 rounded-xl py-12 text-center text-slate-500">
-                <CheckCircle2 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
                 <p className="text-sm font-semibold">No se encontraron tareas</p>
                 <p className="text-xs text-slate-400 mt-1">Crea una nueva tarea para comenzar el seguimiento.</p>
               </div>
@@ -592,18 +574,14 @@ export default function DashboardPage() {
                               });
                               setModalOpen(true);
                             }}
-                            className="p-1 text-slate-400 hover:text-blue-600 transition"
+                            className="px-1.5 py-0.5 text-[11px] font-medium text-slate-500 hover:text-blue-600 transition"
                             title="Editar"
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
+                          >Editar</button>
                           <button
                             onClick={() => handleDeleteTask(task.id)}
-                            className="p-1 text-slate-400 hover:text-red-600 transition"
+                            className="px-1.5 py-0.5 text-[11px] font-medium text-slate-500 hover:text-red-600 transition"
                             title="Eliminar"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                          >Eliminar</button>
                         </div>
                       </div>
 
@@ -806,7 +784,7 @@ export default function DashboardPage() {
                 Trazabilidad y Registros de Auditoría
               </h2>
               <p className="text-xs text-slate-500">
-                Pista de auditoría de operaciónes criticas y eventos de seguridad.
+                Pista de auditoría de operaciones críticas y eventos de seguridad.
               </p>
             </div>
 
@@ -889,11 +867,36 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </div>
+
+              <form onSubmit={handleNameChange} className="pt-4 border-t border-slate-100 space-y-2">
+                <label htmlFor="profile-name" className="block text-xs text-slate-600 font-medium">
+                  Cambiar nombre
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="profile-name"
+                    type="text"
+                    required
+                    minLength={2}
+                    maxLength={100}
+                    value={nameForm}
+                    onChange={(e) => setNameForm(e.target.value)}
+                    placeholder={currentUser.name}
+                    className="flex-1 px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition"
+                  >
+                    Guardar
+                  </button>
+                </div>
+                {nameMsg && <p className="text-xs text-slate-600">{nameMsg}</p>}
+              </form>
             </div>
 
             <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
-              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-                <KeyRound className="w-4 h-4 text-slate-600" /> Cambiar Contraseña
+              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1.5"> Cambiar Contraseña
               </h3>
 
               {profileMsg && (

@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Datos de restablecimiento invalidos", details: parsed.error.format() },
+        { error: "Datos de restablecimiento inválidos", details: parsed.error.format() },
         { status: 400 }
       );
     }
@@ -26,12 +26,12 @@ export async function POST(req: Request) {
     if (!resetRecord || resetRecord.usedAt || resetRecord.expiresAt < new Date()) {
       await logAudit({
         action: "AUTH_RESET_PASSWORD_FAILED",
-        details: { reason: "Token invalido, expirado o reutilizado" },
+        details: { reason: "Token inválido, expirado o reutilizado" },
         ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
       });
 
       return NextResponse.json(
-        { error: "Token invalido, expirado o ya utilizado" },
+        { error: "Token inválido, expirado o ya utilizado" },
         { status: 400 }
       );
     }
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
       data: { passwordHash: newPasswordHash },
     });
 
-    // 3. Revocar todas las sesiones activas del usuario (defensa contra robo de sesiones)
+    // 3. Revocar todas las sesiónes activas del usuario (defensa contra robo de sesiónes)
     await prisma.session.updateMany({
       where: { userId: resetRecord.userId, revokedAt: null },
       data: { revokedAt: new Date() },
@@ -62,12 +62,12 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({
-      message: "Contrasena actualizada exitosamente. Inicie sesion con su nueva clave.",
+      message: "Contraseña actualizada exitosamente. Inicie sesión con su nueva clave.",
     });
   } catch (err) {
     console.error("Error en reset-password:", err);
     return NextResponse.json(
-      { error: "Error interno al restablecer contrasena" },
+      { error: "Error interno al restablecer contraseña" },
       { status: 500 }
     );
   }

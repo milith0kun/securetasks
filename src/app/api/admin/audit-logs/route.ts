@@ -34,7 +34,7 @@ export async function GET() {
 
     return NextResponse.json({ logs });
   } catch (err) {
-    console.error("Error al consultar logs de auditoria:", err);
-    return NextResponse.json({ error: "Error al consultar auditoria" }, { status: 500 });
+    console.error("Error al consultar logs de auditoría:", err);
+    return NextResponse.json({ error: "Error al consultar auditoría" }, { status: 500 });
   }
 }

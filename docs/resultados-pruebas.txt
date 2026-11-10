@@ -2,34 +2,35 @@
  RUN  v3.2.7 D:/Proyectos/Ing de Sofware 2/securetasks
 
  ✓ tests/security.test.ts > Registro y autenticación > registra un usuario y fuerza el rol estudiante aunque se envíe otro 14ms
- ✓ tests/security.test.ts > Registro y autenticación > rechaza correo duplicado con 409 9ms
+ ✓ tests/security.test.ts > Registro y autenticación > rechaza correo duplicado con 409 8ms
  ✓ tests/security.test.ts > Registro y autenticación > login correcto devuelve sesión y /me responde 200 16ms
- ✓ tests/security.test.ts > Registro y autenticación > credenciales inválidas devuelven 401 13ms
+ ✓ tests/security.test.ts > Registro y autenticación > credenciales inválidas devuelven 401 14ms
  ✓ tests/security.test.ts > Registro y autenticación > sin sesión /me devuelve 401 0ms
- ✓ tests/security.test.ts > Fuerza bruta > bloquea con 429 tras 5 intentos fallidos, incluso con la clave correcta 38ms
+ ✓ tests/security.test.ts > Fuerza bruta > bloquea con 429 tras 5 intentos fallidos, incluso con la clave correcta 42ms
  ✓ tests/security.test.ts > Sesiones > sesión expirada es rechazada con 401 6ms
- ✓ tests/security.test.ts > Sesiones > sesión revocada (logout) no se puede reutilizar 6ms
- ✓ tests/security.test.ts > Sesiones > solo se guarda el hash del token de sesión 7ms
- ✓ tests/security.test.ts > Recuperación de contraseña > el token es de un solo uso y la reutilización devuelve 400 16ms
- ✓ tests/security.test.ts > Recuperación de contraseña > un token nuevo invalida el anterior y el restablecimiento revoca sesiones 13ms
- ✓ tests/security.test.ts > Recuperación de contraseña > token expirado devuelve 400 y correo inexistente no revela información 7ms
+ ✓ tests/security.test.ts > Sesiones > sesión revocada (logout) no se puede reutilizar 8ms
+ ✓ tests/security.test.ts > Sesiones > solo se guarda el hash del token de sesión 8ms
+ ✓ tests/security.test.ts > Recuperación de contraseña > el token es de un solo uso y la reutilización devuelve 400 19ms
+ ✓ tests/security.test.ts > Recuperación de contraseña > un token nuevo invalida el anterior y el restablecimiento revoca sesiones 14ms
+ ✓ tests/security.test.ts > Recuperación de contraseña > token expirado devuelve 400 y correo inexistente no revela información 8ms
  ✓ tests/security.test.ts > Recuperación de contraseña > no se guarda el token ni la contraseña en claro, ni en auditoría 6ms
- ✓ tests/security.test.ts > Tareas, IDOR y roles > CRUD de tareas propias 7ms
- ✓ tests/security.test.ts > Tareas, IDOR y roles > IDOR: otro estudiante recibe 403 en GET, PUT y DELETE y no ve la tarea en el listado 13ms
+ ✓ tests/security.test.ts > Tareas, IDOR y roles > CRUD de tareas propias 8ms
+ ✓ tests/security.test.ts > Tareas, IDOR y roles > IDOR: otro estudiante recibe 403 en GET, PUT y DELETE y no ve la tarea en el listado 14ms
  ✓ tests/security.test.ts > Tareas, IDOR y roles > el propietario no se puede suplantar enviando userId 6ms
- ✓ tests/security.test.ts > Tareas, IDOR y roles > el administrador ve todas las tareas 24ms
+ ✓ tests/security.test.ts > Tareas, IDOR y roles > el administrador ve todas las tareas 26ms
  ✓ tests/security.test.ts > Tareas, IDOR y roles > estudiante no puede cambiar roles ni listar usuarios (403) 7ms
- ✓ tests/security.test.ts > Tareas, IDOR y roles > administrador cambia roles y un rol inválido da 400 18ms
- ✓ tests/security.test.ts > Tareas, IDOR y roles > resumen docente: estudiante recibe 403 6ms
+ ✓ tests/security.test.ts > Tareas, IDOR y roles > administrador cambia roles y un rol inválido da 400 20ms
+ ✓ tests/security.test.ts > Tareas, IDOR y roles > el administrador no puede cambiar su propio rol (400) 14ms
+ ✓ tests/security.test.ts > Tareas, IDOR y roles > resumen docente: estudiante recibe 403 7ms
  ✓ tests/security.test.ts > Tareas, IDOR y roles > endpoints sin sesión devuelven 401 0ms
  ✓ tests/security.test.ts > Validación, SQLi y XSS > entradas inválidas devuelven 400 7ms
- ✓ tests/security.test.ts > Validación, SQLi y XSS > SQLi en login se trata como dato: 400/401, nunca acceso 12ms
- ✓ tests/security.test.ts > Validación, SQLi y XSS > SQLi en búsqueda no expone tareas ajenas ni altera la tabla 12ms
+ ✓ tests/security.test.ts > Validación, SQLi y XSS > SQLi en login se trata como dato: 400/401, nunca acceso 13ms
+ ✓ tests/security.test.ts > Validación, SQLi y XSS > SQLi en búsqueda no expone tareas ajenas ni altera la tabla 13ms
  ✓ tests/security.test.ts > Validación, SQLi y XSS > XSS: el contenido se almacena como texto y se devuelve como JSON 7ms
- ✓ tests/security.test.ts > Validación, SQLi y XSS > el frontend no usa dangerouslySetInnerHTML ni innerHTML 1ms
+ ✓ tests/security.test.ts > Validación, SQLi y XSS > el frontend no usa dangerouslySetInnerHTML ni innerHTML 0ms
 
  Test Files  1 passed (1)
-      Tests  26 passed (26)
-   Start at  15:22:12
-   Duration  1.02s (transform 90ms, setup 0ms, collect 193ms, tests 274ms, environment 0ms, prepare 61ms)
+      Tests  27 passed (27)
+   Start at  15:26:50
+   Duration  1.08s (transform 109ms, setup 0ms, collect 208ms, tests 308ms, environment 0ms, prepare 359ms)
 

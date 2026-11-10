@@ -28,7 +28,7 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Error al iniciar sesion");
+        setError(data.error || "Error al iniciar sesión");
         if (data.remainingAttempts !== undefined) {
           setRemainingAttempts(data.remainingAttempts);
         }
@@ -38,7 +38,7 @@ export default function LoginPage() {
       router.push("/");
       router.refresh();
     } catch {
-      setError("Error de conexion con el servidor");
+      setError("Error de conexión con el servidor");
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ export default function LoginPage() {
           <div>
             <div className="flex justify-between items-center mb-1">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-600">
-                Contrasena
+                Contraseña
               </label>
               <Link
                 href="/forgot-password"
@@ -119,7 +119,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            {loading ? "Verificando..." : "Iniciar Sesion"}
+            {loading ? "Verificando..." : "Iniciar sesión"}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>

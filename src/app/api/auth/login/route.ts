@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Datos de acceso invalidos", details: parsed.error.format() },
+        { error: "Datos de acceso inválidos", details: parsed.error.format() },
         { status: 400 }
       );
     }
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
       });
 
       return NextResponse.json(
-        { error: "Credenciales de acceso invalidas", remainingAttempts: rateLimit.remainingAttempts - 1 },
+        { error: "Credenciales de acceso inválidas", remainingAttempts: rateLimit.remainingAttempts - 1 },
         { status: 401 }
       );
     }
@@ -77,12 +77,12 @@ export async function POST(req: Request) {
       await logAudit({
         action: "AUTH_LOGIN_FAIL",
         userId: user.id,
-        details: { email: normalizedEmail, reason: "Contrasena incorrecta" },
+        details: { email: normalizedEmail, reason: "Contraseña incorrecta" },
         ipAddress,
       });
 
       return NextResponse.json(
-        { error: "Credenciales de acceso invalidas", remainingAttempts: rateLimit.remainingAttempts - 1 },
+        { error: "Credenciales de acceso inválidas", remainingAttempts: rateLimit.remainingAttempts - 1 },
         { status: 401 }
       );
     }
@@ -99,7 +99,7 @@ export async function POST(req: Request) {
     });
 
     const response = NextResponse.json({
-      message: "Inicio de sesion exitoso",
+      message: "Inicio de sesión exitoso",
       user: {
         id: user.id,
         name: user.name,
@@ -122,7 +122,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("Error en login:", err);
     return NextResponse.json(
-      { error: "Error interno del servidor al procesar el inicio de sesion" },
+      { error: "Error interno del servidor al procesar el inicio de sesión" },
       { status: 500 }
     );
   }

@@ -92,7 +92,7 @@ export async function recordLoginAttempt(
       },
     });
   } catch (err) {
-    console.error("Error al registrar intento de inicio de sesion:", err);
+    console.error("Error al registrar intento de inicio de sesión:", err);
   }
 }
 
@@ -125,65 +125,65 @@ export async function logAudit(params: {
       },
     });
   } catch (err) {
-    console.error("Error al registrar auditoria:", err);
+    console.error("Error al registrar auditoría:", err);
   }
 }
 
 // 5. VALIDATION SCHEMAS (ZOD)
 export const RegisterSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
-  email: z.string().email("Correo electronico invalido").max(150),
+  email: z.string().email("Correo electrónico inválido").max(150),
   password: z
     .string()
-    .min(8, "La contrasena debe tener al menos 8 caracteres")
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
     .max(100)
-    .regex(/[A-Z]/, "Debe contener al menos una mayuscula")
-    .regex(/[a-z]/, "Debe contener al menos una minuscula")
-    .regex(/[0-9]/, "Debe contener al menos un numero")
-    .regex(/[^A-Za-z0-9]/, "Debe contener al menos un caracter especial"),
+    .regex(/[A-Z]/, "Debe contener al menos una mayúscula")
+    .regex(/[a-z]/, "Debe contener al menos una minúscula")
+    .regex(/[0-9]/, "Debe contener al menos un número")
+    .regex(/[^A-Za-z0-9]/, "Debe contener al menos un carácter especial"),
 });
 
 export const LoginSchema = z.object({
-  email: z.string().email("Correo electronico invalido"),
-  password: z.string().min(1, "La contrasena es requerida"),
+  email: z.string().email("Correo electrónico inválido"),
+  password: z.string().min(1, "La contraseña es requerida"),
 });
 
 export const ForgotPasswordSchema = z.object({
-  email: z.string().email("Correo electronico invalido"),
+  email: z.string().email("Correo electrónico inválido"),
 });
 
 export const ResetPasswordSchema = z.object({
   token: z.string().min(1, "El token es requerido"),
   newPassword: z
     .string()
-    .min(8, "La contrasena debe tener al menos 8 caracteres")
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
     .max(100)
-    .regex(/[A-Z]/, "Debe contener al menos una mayuscula")
-    .regex(/[a-z]/, "Debe contener al menos una minuscula")
-    .regex(/[0-9]/, "Debe contener al menos un numero")
-    .regex(/[^A-Za-z0-9]/, "Debe contener al menos un caracter especial"),
+    .regex(/[A-Z]/, "Debe contener al menos una mayúscula")
+    .regex(/[a-z]/, "Debe contener al menos una minúscula")
+    .regex(/[0-9]/, "Debe contener al menos un número")
+    .regex(/[^A-Za-z0-9]/, "Debe contener al menos un carácter especial"),
 });
 
 export const ChangePasswordSchema = z.object({
-  currentPassword: z.string().min(1, "La contrasena actual es requerida"),
+  currentPassword: z.string().min(1, "La contraseña actual es requerida"),
   newPassword: z
     .string()
-    .min(8, "La contrasena nueva debe tener al menos 8 caracteres")
+    .min(8, "La contraseña nueva debe tener al menos 8 caracteres")
     .max(100)
-    .regex(/[A-Z]/, "Debe contener al menos una mayuscula")
-    .regex(/[a-z]/, "Debe contener al menos una minuscula")
-    .regex(/[0-9]/, "Debe contener al menos un numero")
-    .regex(/[^A-Za-z0-9]/, "Debe contener al menos un caracter especial"),
+    .regex(/[A-Z]/, "Debe contener al menos una mayúscula")
+    .regex(/[a-z]/, "Debe contener al menos una minúscula")
+    .regex(/[0-9]/, "Debe contener al menos un número")
+    .regex(/[^A-Za-z0-9]/, "Debe contener al menos un carácter especial"),
 });
 
 export const TaskCreateSchema = z.object({
-  title: z.string().min(1, "El titulo es obligatorio").max(150),
+  title: z.string().min(1, "El título es obligatorio").max(150),
   description: z.string().max(2000).default(""),
   status: z.enum(["pendiente", "en_progreso", "completada"]).default("pendiente"),
 });
 
 export const TaskUpdateSchema = z.object({
-  title: z.string().min(1, "El titulo es obligatorio").max(150).optional(),
+  title: z.string().min(1, "El título es obligatorio").max(150).optional(),
   description: z.string().max(2000).optional(),
   status: z.enum(["pendiente", "en_progreso", "completada"]).optional(),
 });

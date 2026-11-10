@@ -26,7 +26,7 @@ El primer administrador debe crearse con un usuario registrado y cambiando su ro
 npm test
 ```
 
-Las pruebas usan una base de datos en memoria, sin PostgreSQL. Resultado actual: 26 pruebas aprobadas ([docs/resultados-pruebas.txt](docs/resultados-pruebas.txt)).
+Las pruebas usan una base de datos en memoria, sin PostgreSQL. Resultado actual: 27 pruebas aprobadas ([docs/resultados-pruebas.txt](docs/resultados-pruebas.txt)).
 
 ## Despliegue (Nixpacks)
 

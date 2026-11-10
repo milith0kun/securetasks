@@ -6,7 +6,7 @@ export async function GET() {
     const sessionData = await getSessionUser();
 
     if (!sessionData) {
-      return NextResponse.json({ error: "No autorizado. Sesion no valida o expirada" }, { status: 401 });
+      return NextResponse.json({ error: "No autorizado. Sesión no valida o expirada" }, { status: 401 });
     }
 
     const { user } = sessionData;

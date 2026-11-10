@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Recuperar Acceso</h1>
           <p className="text-sm text-slate-500">
-            Ingresa tu correo para recibir un token seguro de recuperacion de un solo uso.
+            Ingresa tu correo para recibir un token seguro de recuperación de un solo uso.
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
             {tokenHint && (
               <div className="pt-2 border-t border-emerald-200/60">
                 <p className="text-[11px] font-semibold text-emerald-900 mb-1">
-                  Token generado (Modo Demostracion/Pruebas):
+                  Token generado (Modo Demostración/Pruebas):
                 </p>
                 <code className="block p-2 bg-emerald-100 rounded text-xs text-emerald-950 font-mono break-all select-all">
                   {tokenHint}
@@ -104,7 +104,7 @@ export default function ForgotPasswordPage() {
               disabled={loading}
               className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {loading ? "Generando Token..." : "Generar Token de Recuperacion"}
+              {loading ? "Generando Token..." : "Generar Token de Recuperación"}
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -112,7 +112,7 @@ export default function ForgotPasswordPage() {
 
         <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
           <Link href="/login" className="inline-flex items-center gap-1 text-slate-600 hover:text-blue-600">
-            <ArrowLeft className="w-3.5 h-3.5" /> Volver al Inicio de Sesion
+            <ArrowLeft className="w-3.5 h-3.5" /> Volver al Inicio de Sesión
           </Link>
         </div>
       </div>

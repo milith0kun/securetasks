@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const response = NextResponse.json({ message: "Sesion cerrada correctamente" });
+    const response = NextResponse.json({ message: "Sesión cerrada correctamente" });
     response.cookies.set({
       name: SESSION_COOKIE_NAME,
       value: "",
@@ -29,6 +29,6 @@ export async function POST(req: Request) {
     return response;
   } catch (err) {
     console.error("Error en logout:", err);
-    return NextResponse.json({ error: "Error al cerrar sesion" }, { status: 500 });
+    return NextResponse.json({ error: "Error al cerrar sesión" }, { status: 500 });
   }
 }

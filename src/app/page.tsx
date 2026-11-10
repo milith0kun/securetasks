@@ -107,6 +107,18 @@ export default function DashboardPage() {
   const [profileForm, setProfileForm] = useState({ currentPassword: "", newPassword: "" });
   const [profileMsg, setProfileMsg] = useState<string | null>(null);
 
+  // Avisos de error visibles al usuario
+  const [notice, setNotice] = useState<string | null>(null);
+
+  const readError = async (res: Response, fallback: string) => {
+    try {
+      const data = await res.json();
+      return data.error || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
   // 1. Cargar usuario actual
   const loadMe = useCallback(async () => {
     try {
@@ -201,47 +213,41 @@ export default function DashboardPage() {
   const handleSaveTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!taskForm.title.trim()) return;
+    setNotice(null);
 
     try {
-      if (editingTask) {
-        const res = await fetch(`/api/tasks/${editingTask.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(taskForm),
-        });
-        if (res.ok) {
-          setModalOpen(false);
-          setEditingTask(null);
-          loadTasks();
-        }
-      } else {
-        const res = await fetch("/api/tasks", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(taskForm),
-        });
-        if (res.ok) {
-          setModalOpen(false);
-          setTaskForm({ title: "", description: "", status: "pendiente" });
-          loadTasks();
-        }
+      const res = await fetch(editingTask ? `/api/tasks/${editingTask.id}` : "/api/tasks", {
+        method: editingTask ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskForm),
+      });
+      if (!res.ok) {
+        setNotice(await readError(res, "No se pudo guardar la tarea."));
+        return;
       }
-    } catch (e) {
-      console.error(e);
+      setModalOpen(false);
+      setEditingTask(null);
+      setTaskForm({ title: "", description: "", status: "pendiente" });
+      loadTasks();
+    } catch {
+      setNotice("Error de conexión al guardar la tarea.");
     }
   };
 
   const handleDeleteTask = async (id: string) => {
-    if (!confirm("Esta seguro de eliminar esta tarea?")) return;
+    if (!confirm("¿Está seguro de eliminar esta tarea?")) return;
+    setNotice(null);
     try {
       const res = await fetch(`/api/tasks/${id}`, { method: "DELETE" });
       if (res.ok) loadTasks();
-    } catch (e) {
-      console.error(e);
+      else setNotice(await readError(res, "No se pudo eliminar la tarea."));
+    } catch {
+      setNotice("Error de conexión al eliminar la tarea.");
     }
   };
 
   const handleUpdateRole = async (userId: string, newRole: string) => {
+    setNotice(null);
     try {
       const res = await fetch(`/api/admin/users/${userId}/role`, {
         method: "PATCH",
@@ -249,8 +255,9 @@ export default function DashboardPage() {
         body: JSON.stringify({ role: newRole }),
       });
       if (res.ok) loadAdmin();
-    } catch (e) {
-      console.error(e);
+      else setNotice(await readError(res, "No se pudo cambiar el rol."));
+    } catch {
+      setNotice("Error de conexión al cambiar el rol.");
     }
   };
 
@@ -270,20 +277,20 @@ export default function DashboardPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        setProfileMsg("Contrasena actualizada con exito");
+        setProfileMsg("Contraseña actualizada con exito");
         setProfileForm({ currentPassword: "", newPassword: "" });
       } else {
         setProfileMsg(data.error || "Error al actualizar clave");
       }
     } catch {
-      setProfileMsg("Error de conexion");
+      setProfileMsg("Error de conexión");
     }
   };
 
   if (!authChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500 text-sm">
-        Verificando credenciales del sistema...
+        Cargando...
       </div>
     );
   }
@@ -305,7 +312,7 @@ export default function DashboardPage() {
                 href="/login"
                 className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition"
               >
-                Iniciar Sesion
+                Iniciar sesión
               </Link>
               <Link
                 href="/register"
@@ -319,13 +326,13 @@ export default function DashboardPage() {
 
         <main className="max-w-4xl mx-auto px-4 py-16 text-center space-y-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-xs font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5" /> Arquitectura de Software Seguro y Defensas en Profundidad
+            <ShieldCheck className="w-3.5 h-3.5" /> Ingeniería de Software Seguro
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
-            Gestion de Tareas con Seguridad de Grado Empresarial
+            Gestión de tareas con seguridad desde el diseño
           </h1>
           <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Plataforma desarrollada con Next.js App Router, PostgreSQL y Prisma ORM. Proteccion nativa contra SQL Injection, IDOR, XSS, elevacion de privilegios y fuerza bruta con hashing criptografico Argon2id.
+            Plataforma desarrollada con Next.js App Router, PostgreSQL y Prisma ORM. Protección nativa contra SQL Injection, IDOR, XSS, elevación de privilegios y fuerza bruta, con contraseñas protegidas mediante Argon2id.
           </p>
 
           <div className="flex justify-center gap-4 pt-4">
@@ -348,34 +355,34 @@ export default function DashboardPage() {
               <div className="p-2 bg-blue-50 text-blue-600 rounded-lg w-fit">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">Contrasenas Argon2id</h3>
+              <h3 className="font-bold text-slate-900 text-sm">Contraseñas Argon2id</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Derivacion de claves con algoritmo RFC 9106 Argon2id, memoria dedicada y resistencia ante ataques paralelos por GPU.
+                Derivación de claves con algoritmo RFC 9106 Argon2id, memoria dedicada y resistencia ante ataques paralelos por GPU.
               </p>
             </div>
             <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-xs space-y-2">
               <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg w-fit">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">Control RBAC & Anti-IDOR</h3>
+              <h3 className="font-bold text-slate-900 text-sm">Control de roles y anti-IDOR</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Verificacion de propiedad en capa de backend para estudiantes, docentes y administradores sin fuga de objetos directos.
+                Permisos comprobados en el servidor para estudiantes, docentes y administradores.
               </p>
             </div>
             <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-xs space-y-2">
               <div className="p-2 bg-purple-50 text-purple-600 rounded-lg w-fit">
                 <FileText className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">Auditoria Inmutable</h3>
+              <h3 className="font-bold text-slate-900 text-sm">Auditoría de eventos</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Registro minucioso de cada evento de seguridad y operacion CRUD sin almacenar contraseñas ni tokens en texto plano.
+                Registro de eventos de seguridad y operaciones sobre tareas, sin almacenar contraseñas ni tokens.
               </p>
             </div>
           </div>
         </main>
 
         <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
-          SecureTasks &copy; 2026. Proyecto de Ingenieria de Software Seguro — UNSAAC.
+          SecureTasks &copy; 2026. Proyecto de Ingeniería de Software Seguro — UNSAAC.
         </footer>
       </div>
     );
@@ -407,7 +414,7 @@ export default function DashboardPage() {
             <button
               onClick={handleLogout}
               className="p-2 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
-              title="Cerrar Sesion"
+              title="Cerrar Sesión"
             >
               <LogOut className="w-5 h-5" />
             </button>
@@ -450,7 +457,7 @@ export default function DashboardPage() {
                     : "border-transparent text-slate-600 hover:text-slate-900"
                 }`}
               >
-                <Users className="w-4 h-4" /> Administracion de Usuarios
+                <Users className="w-4 h-4" /> Administración de Usuarios
               </button>
 
               <button
@@ -461,7 +468,7 @@ export default function DashboardPage() {
                     : "border-transparent text-slate-600 hover:text-slate-900"
                 }`}
               >
-                <FileText className="w-4 h-4" /> Registros de Auditoria
+                <FileText className="w-4 h-4" /> Registros de Auditoría
               </button>
             </>
           )}
@@ -481,6 +488,14 @@ export default function DashboardPage() {
 
       {/* Contenido principal */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        {notice && (
+          <div role="alert" className="mb-4 p-3 text-xs bg-red-50 text-red-700 rounded-lg border border-red-200 flex justify-between items-center">
+            <span>{notice}</span>
+            <button onClick={() => setNotice(null)} className="font-semibold hover:underline">
+              Cerrar
+            </button>
+          </div>
+        )}
         {/* PESTAÑA: TAREAS */}
         {activeTab === "tasks" && (
           <div className="space-y-6">
@@ -490,7 +505,7 @@ export default function DashboardPage() {
                   {currentUser.role === "administrador" ? "Todas las Tareas del Sistema" : "Mis Tareas"}
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Control de actividades con verificacion estricta de propiedad (Anti-IDOR).
+                  Control de actividades con verificación estricta de propiedad (Anti-IDOR).
                 </p>
               </div>
 
@@ -512,7 +527,7 @@ export default function DashboardPage() {
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="text"
-                  placeholder="Buscar por titulo o descripcion..."
+                  placeholder="Buscar por título o descripción..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -539,7 +554,7 @@ export default function DashboardPage() {
 
             {/* Lista de tareas */}
             {loadingTasks ? (
-              <div className="text-center py-12 text-xs text-slate-400">Cargando tareas seguras...</div>
+              <div className="text-center py-12 text-xs text-slate-400">Cargando tareas...</div>
             ) : tasks.length === 0 ? (
               <div className="bg-white border border-dashed border-slate-300 rounded-xl py-12 text-center text-slate-500">
                 <CheckCircle2 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
@@ -596,7 +611,7 @@ export default function DashboardPage() {
                         {task.title}
                       </h3>
                       <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed break-words whitespace-pre-wrap">
-                        {task.description || "Sin descripcion adicional."}
+                        {task.description || "Sin descripción adicional."}
                       </p>
                     </div>
 
@@ -620,15 +635,23 @@ export default function DashboardPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-xl font-bold tracking-tight text-slate-900">
-                Modulo de Supervision Docente
+                Módulo de Supervisión Docente
               </h2>
               <p className="text-xs text-slate-500">
-                Metricas consolidadas del avance academico y gestion de actividades.
+                Métricas consolidadas del avance académico y gestion de actividades.
               </p>
             </div>
 
             {teacherData && (
               <div className="space-y-6">
+                <div className="bg-white border border-slate-200 rounded-xl p-4">
+                  <p className="text-xs text-slate-500 font-semibold uppercase">Mis actividades</p>
+                  <p className="text-sm text-slate-700 mt-1">
+                    {teacherData.teacher.myTasks.total} en total · {teacherData.teacher.myTasks.pendiente} pendientes ·{" "}
+                    {teacherData.teacher.myTasks.en_progreso} en progreso · {teacherData.teacher.myTasks.completada} completadas
+                  </p>
+                </div>
+
                 <div className="grid sm:grid-cols-4 gap-4">
                   <div className="bg-white border border-slate-200 rounded-xl p-4">
                     <p className="text-xs text-slate-500 font-semibold uppercase">Total Estudiantes</p>
@@ -726,10 +749,10 @@ export default function DashboardPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-xl font-bold tracking-tight text-slate-900">
-                Gestion de Usuarios y Asignacion de Roles
+                Gestión de Usuarios y Asignación de Roles
               </h2>
               <p className="text-xs text-slate-500">
-                Administracion centralizada con proteccion contra elevacion indebida de privilegios.
+                Administración centralizada con proteccion contra elevación indebida de privilegios.
               </p>
             </div>
 
@@ -780,10 +803,10 @@ export default function DashboardPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-xl font-bold tracking-tight text-slate-900">
-                Trazabilidad y Registros de Auditoria
+                Trazabilidad y Registros de Auditoría
               </h2>
               <p className="text-xs text-slate-500">
-                Pista de auditoria de operaciones criticas y eventos de seguridad.
+                Pista de auditoría de operaciónes criticas y eventos de seguridad.
               </p>
             </div>
 
@@ -792,9 +815,9 @@ export default function DashboardPage() {
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200 sticky top-0">
                     <tr>
-                      <th className="py-3 px-4">Accion</th>
+                      <th className="py-3 px-4">Acción</th>
                       <th className="py-3 px-4">Usuario</th>
-                      <th className="py-3 px-4">Direccion IP</th>
+                      <th className="py-3 px-4">Dirección IP</th>
                       <th className="py-3 px-4">Detalles</th>
                       <th className="py-3 px-4">Fecha y Hora</th>
                     </tr>
@@ -816,7 +839,7 @@ export default function DashboardPage() {
                           </span>
                         </td>
                         <td className="py-2.5 px-4 font-medium text-slate-700">
-                          {log.user ? `${log.user.name} (${log.user.email})` : "Anonimo / Sistema"}
+                          {log.user ? `${log.user.name} (${log.user.email})` : "Anónimo / Sistema"}
                         </td>
                         <td className="py-2.5 px-4 font-mono text-slate-500">{log.ipAddress || "—"}</td>
                         <td className="py-2.5 px-4 font-mono text-[11px] text-slate-500 max-w-xs truncate">
@@ -840,7 +863,7 @@ export default function DashboardPage() {
             <div>
               <h2 className="text-xl font-bold tracking-tight text-slate-900">Perfil y Seguridad</h2>
               <p className="text-xs text-slate-500">
-                Informacion de tu cuenta y actualizacion de credenciales.
+                Información de tu cuenta y actualización de credenciales.
               </p>
             </div>
 
@@ -870,7 +893,7 @@ export default function DashboardPage() {
 
             <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
               <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-                <KeyRound className="w-4 h-4 text-slate-600" /> Cambiar Contrasena
+                <KeyRound className="w-4 h-4 text-slate-600" /> Cambiar Contraseña
               </h3>
 
               {profileMsg && (
@@ -882,7 +905,7 @@ export default function DashboardPage() {
               <form onSubmit={handlePasswordChange} className="space-y-3">
                 <div>
                   <label className="block text-xs text-slate-600 font-medium mb-1">
-                    Contrasena Actual
+                    Contraseña Actual
                   </label>
                   <input
                     type="password"
@@ -896,7 +919,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <label className="block text-xs text-slate-600 font-medium mb-1">
-                    Nueva Contrasena (Min. 8 caracteres, mayuscula, numero, simbolo)
+                    Nueva Contraseña (Mín. 8 caracteres, mayúscula, número, símbolo)
                   </label>
                   <input
                     type="password"
@@ -930,19 +953,19 @@ export default function DashboardPage() {
 
             <form onSubmit={handleSaveTask} className="space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Titulo</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Título</label>
                 <input
                   type="text"
                   required
                   value={taskForm.title}
                   onChange={(e) => setTaskForm({ ...taskForm, title: e.target.value })}
-                  placeholder="Ej: Auditoria de vulnerabilidades"
+                  placeholder="Ej: Auditoría de vulnerabilidades"
                   className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Descripcion</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Descripción</label>
                 <textarea
                   rows={3}
                   value={taskForm.description}

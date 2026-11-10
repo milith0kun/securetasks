@@ -178,6 +178,11 @@ describe("Tareas, IDOR y roles", () => {
     expect((await patchRole(json({ role: "superroot" }), ctxId(body.user.id))).status).toBe(400);
     expect((await patchRole(json({ role: "docente" }), ctxId(body.user.id))).status).toBe(200);
   });
+  it("el administrador no puede cambiar su propio rol (400)", async () => {
+    const admin = await seedUser("admin", "administrador");
+    await loginAs("admin");
+    expect((await patchRole(json({ role: "estudiante" }), ctxId(admin.id))).status).toBe(400);
+  });
   it("resumen docente: estudiante recibe 403", async () => {
     await signup("a");
     expect((await summary()).status).toBe(403);

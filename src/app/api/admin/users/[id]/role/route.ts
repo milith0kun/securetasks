@@ -36,7 +36,15 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Rol invalido", details: parsed.error.format() },
+        { error: "Rol inválido", details: parsed.error.format() },
+        { status: 400 }
+      );
+    }
+
+    // Evita que el administrador se quite su propio rol y deje el sistema sin administradores
+    if (id === currentUser.id) {
+      return NextResponse.json(
+        { error: "No puede modificar su propio rol." },
         { status: 400 }
       );
     }

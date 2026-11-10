@@ -15,11 +15,11 @@ export default function RegisterPage() {
 
   // Validación en tiempo real de reglas de contraseñas robustas
   const rules = [
-    { label: "Minimo 8 caracteres", pass: password.length >= 8 },
-    { label: "Al menos una mayuscula", pass: /[A-Z]/.test(password) },
-    { label: "Al menos una minuscula", pass: /[a-z]/.test(password) },
-    { label: "Al menos un numero", pass: /[0-9]/.test(password) },
-    { label: "Al menos un caracter especial", pass: /[^A-Za-z0-9]/.test(password) },
+    { label: "Mínimo 8 caracteres", pass: password.length >= 8 },
+    { label: "Al menos una mayúscula", pass: /[A-Z]/.test(password) },
+    { label: "Al menos una minúscula", pass: /[a-z]/.test(password) },
+    { label: "Al menos un número", pass: /[0-9]/.test(password) },
+    { label: "Al menos un carácter especial", pass: /[^A-Za-z0-9]/.test(password) },
   ];
 
   const isPasswordValid = rules.every((r) => r.pass);
@@ -27,7 +27,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPasswordValid) {
-      setError("La contrasena no cumple con todos los requisitos de seguridad");
+      setError("La contraseña no cumple con todos los requisitos de seguridad");
       return;
     }
 
@@ -51,7 +51,7 @@ export default function RegisterPage() {
       router.push("/");
       router.refresh();
     } catch {
-      setError("Error de conexion con el servidor");
+      setError("Error de conexión con el servidor");
     } finally {
       setLoading(false);
     }
@@ -113,7 +113,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">
-              Contrasena Segura (Argon2id)
+              Contraseña Segura (Argon2id)
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -158,7 +158,7 @@ export default function RegisterPage() {
         <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
           Ya tienes una cuenta?{" "}
           <Link href="/login" className="text-blue-600 font-semibold hover:underline">
-            Inicia Sesion
+            Inicia Sesión
           </Link>
         </div>
       </div>

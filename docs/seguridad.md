@@ -75,4 +75,4 @@ Escala: 1–4 Bajo · 5–9 Medio · 10–16 Alto · 17–25 Crítico. Valores d
 
 ## 6. Alcance de las pruebas
 
-Las 26 pruebas llaman directamente a los Route Handlers con una base de datos **en memoria** (`tests/fakePrisma.ts`), por lo que están aisladas de cualquier PostgreSQL. Esto verifica la lógica de autenticación, autorización y validación, pero **no** ejecuta SQL real: la resistencia a SQL Injection se apoya en el uso de Prisma y en que los payloads se traten como datos. Una prueba de integración contra PostgreSQL de pruebas queda pendiente. Resultados reales: [resultados-pruebas.txt](resultados-pruebas.txt).
+Las 27 pruebas llaman directamente a los Route Handlers con una base de datos **en memoria** (`tests/fakePrisma.ts`), por lo que están aisladas de cualquier PostgreSQL. Esto verifica la lógica de autenticación, autorización y validación, pero **no** ejecuta SQL real: la resistencia a SQL Injection se apoya en el uso de Prisma y en que los payloads se traten como datos. Una prueba de integración contra PostgreSQL de pruebas queda pendiente. Resultados reales: [resultados-pruebas.txt](resultados-pruebas.txt).

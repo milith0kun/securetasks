@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SecureTasks — Sistema de Gestion de Tareas Seguras",
-  description: "Plataforma de tareas con autenticacion robusta Argon2id, RBAC y defensas en profundidad",
+  title: "SecureTasks — Sistema de Gestión de Tareas Seguras",
+  description: "Plataforma de tareas con autenticación robusta Argon2id, RBAC y defensas en profundidad",
 };
 
 export default function RootLayout({

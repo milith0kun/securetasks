@@ -88,7 +88,7 @@ export async function PUT(
       });
 
       return NextResponse.json(
-        { error: "Acceso denegado. No tiene autorizacion para modificar esta tarea." },
+        { error: "Acceso denegado. No tiene autorización para modificar esta tarea." },
         { status: 403 }
       );
     }
@@ -98,7 +98,7 @@ export async function PUT(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Datos de actualizacion invalidos", details: parsed.error.format() },
+        { error: "Datos de actualización inválidos", details: parsed.error.format() },
         { status: 400 }
       );
     }
@@ -158,7 +158,7 @@ export async function DELETE(
       });
 
       return NextResponse.json(
-        { error: "Acceso denegado. No tiene autorizacion para eliminar esta tarea." },
+        { error: "Acceso denegado. No tiene autorización para eliminar esta tarea." },
         { status: 403 }
       );
     }

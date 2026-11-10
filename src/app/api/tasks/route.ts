@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Datos de tarea invalidos", details: parsed.error.format() },
+        { error: "Datos de tarea inválidos", details: parsed.error.format() },
         { status: 400 }
       );
     }

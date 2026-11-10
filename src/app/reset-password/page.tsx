@@ -29,7 +29,7 @@ function ResetPasswordForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "No se pudo restablecer la contrasena");
+        setError(data.error || "No se pudo restablecer la contraseña");
         return;
       }
 
@@ -38,7 +38,7 @@ function ResetPasswordForm() {
         router.push("/login");
       }, 2500);
     } catch {
-      setError("Error de conexion con el servidor");
+      setError("Error de conexión con el servidor");
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ function ResetPasswordForm() {
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">Restablecer Clave</h1>
         <p className="text-sm text-slate-500">
-          Ingresa el token seguro recibido y define tu nueva contrasena.
+          Ingresa el token seguro recibido y define tu nueva contraseña.
         </p>
       </div>
 
@@ -65,16 +65,16 @@ function ResetPasswordForm() {
       {success ? (
         <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
           <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-          <h2 className="text-sm font-bold text-emerald-900">Contrasena Actualizada</h2>
+          <h2 className="text-sm font-bold text-emerald-900">Contraseña Actualizada</h2>
           <p className="text-xs text-emerald-700">
-            Todas tus sesiones previas han sido revocadas por seguridad. Redirigiendo al login...
+            Todas tus sesiónes previas han sido revocadas por seguridad. Redirigiendo al login...
           </p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">
-              Token de Recuperacion (Un Solo Uso)
+              Token de Recuperación (Un Solo Uso)
             </label>
             <div className="relative">
               <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -91,7 +91,7 @@ function ResetPasswordForm() {
 
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">
-              Nueva Contrasena
+              Nueva Contraseña
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -100,7 +100,7 @@ function ResetPasswordForm() {
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Minimo 8 caracteres, mayuscula, numero, simbolo"
+                placeholder="Mínimo 8 caracteres, mayúscula, número, símbolo"
                 className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -119,7 +119,7 @@ function ResetPasswordForm() {
 
       <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
         <Link href="/login" className="text-blue-600 hover:underline">
-          Volver a Inicio de Sesion
+          Volver a Inicio de Sesión
         </Link>
       </div>
     </div>

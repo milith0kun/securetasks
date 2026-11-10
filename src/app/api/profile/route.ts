@@ -46,14 +46,14 @@ export async function PUT(req: Request) {
       const parsed = ChangePasswordSchema.safeParse(body);
       if (!parsed.success) {
         return NextResponse.json(
-          { error: "Datos de contrasena invalidos", details: parsed.error.format() },
+          { error: "Datos de contraseña inválidos", details: parsed.error.format() },
           { status: 400 }
         );
       }
 
       const isValid = await verifyPassword(user.passwordHash, parsed.data.currentPassword);
       if (!isValid) {
-        return NextResponse.json({ error: "La contrasena actual es incorrecta" }, { status: 400 });
+        return NextResponse.json({ error: "La contraseña actual es incorrecta" }, { status: 400 });
       }
 
       const newHash = await hashPassword(parsed.data.newPassword);
@@ -68,13 +68,13 @@ export async function PUT(req: Request) {
         ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
       });
 
-      return NextResponse.json({ message: "Contrasena modificada correctamente" });
+      return NextResponse.json({ message: "Contraseña modificada correctamente" });
     }
 
     // 2. Caso actualización de datos básicos
     const parsed = UpdateProfileSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Datos invalidos" }, { status: 400 });
+      return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
     }
 
     const updated = await prisma.user.update({

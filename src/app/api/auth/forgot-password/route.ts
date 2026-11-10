@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const parsed = ForgotPasswordSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ error: "Correo electronico invalido" }, { status: 400 });
+      return NextResponse.json({ error: "Correo electrónico inválido" }, { status: 400 });
     }
 
     const email = parsed.data.email.toLowerCase().trim();
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
     // Mensaje genérico para evitar enumeración de usuarios
     return NextResponse.json({
-      message: "Si el correo se encuentra registrado, se enviara un enlace con instrucciones.",
+      message: "Si el correo se encuentra registrado, se enviará un enlace con instrucciones.",
       // En entorno de demostración y pruebas, se retorna el token para facilitar la verificación automatizada
       resetToken: process.env.NODE_ENV !== "production" ? tokenPreview : undefined,
     });

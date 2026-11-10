@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Datos de registro invalidos", details: parsed.error.format() },
+        { error: "Datos de registro inválidos", details: parsed.error.format() },
         { status: 400 }
       );
     }
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     if (existing) {
       return NextResponse.json(
-        { error: "El correo electronico ya se encuentra registrado" },
+        { error: "El correo electrónico ya se encuentra registrado" },
         { status: 409 }
       );
     }
